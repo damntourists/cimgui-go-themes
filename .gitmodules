@@ -1,0 +1,4 @@
+[submodule "ImThemes"]
+	path = ImThemes
+	url = https://github.com/Patitotective/ImThemes.git
+	branch = main
