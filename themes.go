@@ -3,8 +3,8 @@ package imthemes
 import (
 	"errors"
 	"fmt"
-	imgui "github.com/AllenDang/cimgui-go"
 	"github.com/BurntSushi/toml"
+	imgui "github.com/damntourists/cimgui-go-lite"
 	"os"
 	"regexp"
 	"strconv"
@@ -157,7 +157,7 @@ func (c *rgba) UnmarshalText(text []byte) error {
 func init() {
 	collection := ThemeCollection{Themes: make([]*Theme, 0)}
 
-	data, err := os.ReadFile("ImThemes/themes.toml")
+	data, err := os.ReadFile("cimgui-go-themes/ImThemes/themes.toml")
 	panicOnError(err)
 
 	_, err = toml.Decode(string(data), &collection)

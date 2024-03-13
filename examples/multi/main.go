@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	imgui "github.com/AllenDang/cimgui-go"
+	imgui "github.com/damntourists/cimgui-go-lite"
 	"github.com/damntourists/cimgui-go-themes"
 )
 
