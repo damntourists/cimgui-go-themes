@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/BurntSushi/toml"
 	imgui "github.com/damntourists/cimgui-go-lite"
+	"image/color"
 	"os"
 	"regexp"
 	"strconv"
@@ -134,6 +135,27 @@ func panicOnError(err error) {
 	}
 }
 
+func (c *rgba) AsRGBA() color.RGBA {
+	// Vec4ToRGBA converts imgui's Vec4 to golang rgba color.
+	return color.RGBA{
+		R: uint8(c.Vec4.X * 255),
+		G: uint8(c.Vec4.Y * 255),
+		B: uint8(c.Vec4.Z * 255),
+		A: uint8(c.Vec4.W * 255),
+	}
+
+}
+
+func (c *rgba) AsUint32() uint32 {
+	col := c.AsRGBA()
+	mask := uint32(0xff)
+
+	return uint32(col.R)&mask +
+		uint32(col.G)&mask<<8 +
+		uint32(col.B)&mask<<16 +
+		uint32(col.A)&mask<<24
+}
+
 func (c *rgba) UnmarshalText(text []byte) error {
 	var err error
 	r := regexp.MustCompile(`.*rgba\((\d+),\s*(\d+),\s*(\d+),\s*(\d+\.\d+)*\)`)
@@ -254,8 +276,89 @@ func (t *Theme) Apply() func() {
 	imgui.PushStyleColorVec4(imgui.ColNavWindowingDimBg, t.Style.Colors.NavWindowingDimBg.Vec4)
 	imgui.PushStyleColorVec4(imgui.ColModalWindowDimBg, t.Style.Colors.ModalWindowDimBg.Vec4)
 
+	imgui.ImNodesPushColorStyle(imgui.NodesColNodeBackground, t.Style.Colors.FrameBg.AsUint32())
+	imgui.ImNodesPushColorStyle(imgui.NodesColNodeBackgroundSelected, t.Style.Colors.FrameBgActive.AsUint32())
+	imgui.ImNodesPushColorStyle(imgui.NodesColNodeBackgroundHovered, t.Style.Colors.FrameBgHovered.AsUint32())
+	imgui.ImNodesPushColorStyle(imgui.NodesColTitleBar, t.Style.Colors.TabUnfocused.AsUint32())
+	imgui.ImNodesPushColorStyle(imgui.NodesColTitleBarHovered, t.Style.Colors.TabHovered.AsUint32())
+	imgui.ImNodesPushColorStyle(imgui.NodesColTitleBarSelected, t.Style.Colors.TabActive.AsUint32())
+
+	// TODO: ImNode colors
+	//imgui.ImNodesPushAttributeFlag()
+	//imgui.ImNodesPopAttributeFlag()
+
+	//imgui.ImNodesPushStyleVarVec2()
+	//imgui.ImNodesPopStyleVar()
+
+	//imgui.ImNodesPushStyleVarFloat()
+	//imgui.ImNodesPopStyleVarV()
+	//imgui.ImNodesPushColorStyle()
+	//imgui.ImNodesPopColorStyle()
+	/*s
+	imgui.PushStyleColorVec4(imgui.ColFrameBg, t.Style.Colors.FrameBg.Vec4)
+	imgui.PushStyleColorVec4(imgui.ColFrameBgHovered, t.Style.Colors.FrameBgHovered.Vec4)
+	imgui.PushStyleColorVec4(imgui.ColFrameBgActive, t.Style.Colors.FrameBgActive.Vec4)
+
+
+
+	NodesColNodeBackground                = 0
+	NodesColNodeBackgroundHovered         = 1
+	NodesColNodeBackgroundSelected        = 2
+
+
+	NodesColNodeOutline                   = 3
+
+
+	imgui.PushStyleColorVec4(imgui.ColTitleBg, t.Style.Colors.TitleBg.Vec4)
+	imgui.PushStyleColorVec4(imgui.ColTitleBgActive, t.Style.Colors.TitleBgActive.Vec4)
+	imgui.PushStyleColorVec4(imgui.ColTitleBgCollapsed, t.Style.Colors.TitleBgCollapsed.Vec4)
+
+	NodesColTitleBar                      = 4
+	NodesColTitleBarHovered               = 5
+	NodesColTitleBarSelected              = 6
+
+	NodesColLink                          = 7
+	NodesColLinkHovered                   = 8
+	NodesColLinkSelected                  = 9
+
+	NodesColPin                           = 10
+	NodesColPinHovered                    = 11
+
+	NodesColBoxSelector                   = 12
+	NodesColBoxSelectorOutline            = 13
+
+	NodesColGridBackground                = 14
+
+	NodesColGridLine                      = 15
+	NodesColGridLinePrimary               = 16
+
+	NodesColMiniMapBackground             = 17
+	NodesColMiniMapBackgroundHovered      = 18
+
+	NodesColMiniMapOutline                = 19
+	NodesColMiniMapOutlineHovered         = 20
+
+	NodesColMiniMapNodeBackground         = 21
+	NodesColMiniMapNodeBackgroundHovered  = 22
+	NodesColMiniMapNodeBackgroundSelected = 23
+
+	NodesColMiniMapNodeOutline            = 24
+
+	NodesColMiniMapLink                   = 25
+	NodesColMiniMapLinkSelected           = 26
+
+	NodesColMiniMapCanvas                 = 27
+	NodesColMiniMapCanvasOutline          = 28
+
+	NodesColCOUNT                         = 29
+
+	*/
+
 	return func() {
+
+		//imgui.ImNodesPopStyleVarV(3)
 		imgui.PopStyleColorV(53)
+
 	}
 }
 
